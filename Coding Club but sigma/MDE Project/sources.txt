@@ -1,0 +1,4 @@
+Resources:
+
+img/imgCustomer1: https://content.atlantamission.org/content/uploads/2021/05/28144743/Single-fathers-facing-homelessness.jpg
+img/imgCustomer2: https://globalteachingpartners.com/wp-content/uploads/2024/12/Stock_teacher_03.jpg
