@@ -1,0 +1,5 @@
+x = input("Nhập x:")
+print(f"Bạn đã nhập {x}")
+print(type(x))
+x = int(x) if float(x)//1 == float(x) else float(x)
+print(x+2)
