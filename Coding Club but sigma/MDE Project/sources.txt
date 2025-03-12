@@ -1,6 +1,0 @@
-Cloudflare pages site: https://dash.cloudflare.com/81a4dfffce9929b62180cf63c4eb1d1b/pages/view/ap-education
-Site: ap-education.pages.dev
-Resources:
-
-img/imgCustomer1: https://content.atlantamission.org/content/uploads/2021/05/28144743/Single-fathers-facing-homelessness.jpg
-img/imgCustomer2: https://globalteachingpartners.com/wp-content/uploads/2024/12/Stock_teacher_03.jpg

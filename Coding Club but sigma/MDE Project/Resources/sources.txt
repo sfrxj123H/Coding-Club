@@ -1,0 +1,8 @@
+Cloudflare pages site: https://dash.cloudflare.com/81a4dfffce9929b62180cf63c4eb1d1b/pages/view/ap-education
+Site: ap-education.pages.dev
+Resources:
+
+img/playground: https://childcare.earthscapeplay.com/wp-content/uploads/2018/12/St-Petersburg-Pier-florida-natural-playground-marine-kraken-logs-towers-slides-sculptures.jpg
+img/imgCustomer1: https://content.atlantamission.org/content/uploads/2021/05/28144743/Single-fathers-facing-homelessness.jpg
+img/imgCustomer2: https://globalteachingpartners.com/wp-content/uploads/2024/12/Stock_teacher_03.jpg
+img/imgCustomer3: https://www.blackhistorymonth.org.uk/wp-content/uploads/2021/01/shutterstock_763464100-623x438.jpg
