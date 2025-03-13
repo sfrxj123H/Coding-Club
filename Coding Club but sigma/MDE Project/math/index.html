@@ -6,11 +6,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="preload" href="Resources/sources.txt" as="fetch">
     <title>AP Education</title>
 </head>
 <body style="font-size: 18px; font-family: cursive, serif; font-size: 20px; background-color: #E3F2FD;">
-    <style> #category > h2:hover {color:blue}</style>
+    <style> #category > h2:hover {color:blue;} #list > * {color: black;} #list > * :hover {color:blue;}</style>
     <div style="background-color: #33424D; margin-top: -.7cm; height: 150px; color: white">
         <a href="../" style="color: white;"><h1 style="font-family: Atma, cursive, serif; top: 8px; left: 5%; position: absolute;">AP Education</h1></a>
         <h2 style="top: 15px; right: 5%; position: absolute; text-decoration: line-through;">Account</h2>
@@ -29,7 +28,8 @@
     function list(num) {
         if (num == 1) {
             document.querySelector("#list").innerHTML = ""
-            document.querySelector("#list").innerHTML += "<a href='K and G1/numbers.html'><h3>Numbers</h3></a>"
+            document.querySelector("#list").innerHTML += "<a href='K-and-G1/numbers'><h3>Numbers</h3></a>"
+            document.querySelector("#list").innerHTML += "<a href='K-and-G1/addition-and-subtraction'><h3>Addition and Subtraction</h3></a>"
         }
     }
 </script>

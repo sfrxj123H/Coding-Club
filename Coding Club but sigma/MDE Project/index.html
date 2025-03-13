@@ -9,10 +9,10 @@
     <link rel="preload" href="Resources/sources.txt" as="fetch">
     <title>AP Education</title>
 </head>
-<body style="font-size: 18px; font-family: cursive, serif; font-size: 20px; background-color: #E3F2FD;">
+<body style="font-size: 18px; font-family: cursive, serif; font-size: 20px; background-color: #F1F1F1;">
     <div style="background-color: #33424D; margin-top: -.7cm; height: 150px; color: white">
        <h1 style="font-family: Atma, cursive, serif; top: 8px; left: 5%; position: absolute;">AP Education</h1>
-       <h2 style="top: 15px; right: 20%; position: absolute;">Learn now!</h2>
+       <h2 style="top: 15px; right: 20%; position: absolute; text-decoration: underline;" onclick="document.querySelector('#articles').scrollIntoView({behavior: 'smooth'}, true)">Learn now!</h2>
        <h2 style="top: 15px; right: 5%; position: absolute; text-decoration: line-through;">Account</h2>
     </div>
     <div style="background-image: url(Resources/img/playground.jpg); background-size:cover;">
@@ -33,13 +33,13 @@
     </div>
     <div style="width: 70%; margin-left: auto; margin-right: auto; background-color: #FFF3E0;
     text-align: center; font-size: 40px; border: solid 3px; border-radius: 15px;
-    margin-top: 3cm;">
+    margin-top: 3cm;" id="articles">
         <h2 style="font-family: Atma, cursive, serif;">Many subjects and articles waiting for you!</h2>
         <div style="display: grid; grid-template-columns: auto auto;">
-            <a href="math"><h4>Math</h4></a>
-            <a><h4 style="text-decoration: line-through;">Science</h4></a>
-            <a><h4 style="text-decoration: line-through;">English</h4></a>
-            <a><h4 style="text-decoration: line-through;">Show more</h4></a>
+            <a href="math" style="color: black;"><h4>Math</h4></a>
+            <a><h4 style="text-decoration: line-through; color: black;">Science</h4></a>
+            <a><h4 style="text-decoration: line-through; color: black;">English</h4></a>
+            <a><h4 style="text-decoration: line-through; color: black;">Show more</h4></a>
         </div>
     </div>
     <div style="width: 85%; margin-left: auto; margin-right: auto;">
