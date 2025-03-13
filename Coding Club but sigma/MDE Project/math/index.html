@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="Resources/sources.txt" as="fetch">
+    <title>AP Education</title>
+</head>
+<body style="font-size: 18px; font-family: cursive, serif; font-size: 20px; background-color: #E3F2FD;">
+    <style> #category > h2:hover {color:blue}</style>
+    <div style="background-color: #33424D; margin-top: -.7cm; height: 150px; color: white">
+        <a href="../" style="color: white;"><h1 style="font-family: Atma, cursive, serif; top: 8px; left: 5%; position: absolute;">AP Education</h1></a>
+        <h2 style="top: 15px; right: 5%; position: absolute; text-decoration: line-through;">Account</h2>
+     </div>
+     <div style="display: flex; justify-content: space-between; align-items: center; width: 90%; margin-left: auto; margin-right: auto;">
+        <div id="category" style="width: 20%;">
+            <h1>Grades</h1>
+            <h2 id="k-g1" onclick="list(1)" style="text-decoration: underline;">K and G1</h2>
+        </div>
+        <div id="list" style="text-align: center; width: 70%; background-color: white; border-radius: 15px;">
+
+        </div>
+     </div>
+</body>
+<script>
+    function list(num) {
+        if (num == 1) {
+            document.querySelector("#list").innerHTML = ""
+            document.querySelector("#list").innerHTML += "<a href='K and G1/numbers.html'><h3>Numbers</h3></a>"
+        }
+    }
+</script>
