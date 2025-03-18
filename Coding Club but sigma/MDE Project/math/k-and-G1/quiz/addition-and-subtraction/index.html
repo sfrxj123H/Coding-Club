@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>AP Education - Addition and Subtraction Quiz</title>
+</head>
+<body style="font-family: cursive, serif; font-size: 20px; background-color: #E3F2FD;">
+    <style>#buttonSubmit:hover {width: 22%; height: 8%; background-color: blue;}</style>
+    <div style="background-color: #33424D; margin-top: -.7cm; height: 150px; color: white">
+        <a href="../../../../" style="color: white;"><h1 style="font-family: Atma, cursive, serif; top: 8px; left: 5%; position: absolute;">AP Education</h1></a>
+        <h2 style="top: 15px; right: 5%; position: absolute; text-decoration: line-through;">Account</h2>
+     </div>
+     <div style="width: 90%; margin-left: auto; margin-right: auto;">
+        <h1 style="font-size: 100px; text-align: center;">Addition and Subtraction Quiz</h1>
+        <h2 style="text-align: center;" id="level"></h2>
+        <div style="display: flex; justify-content: space-between; width: 20%; margin-left: auto; margin-right: auto;" id="level-marks"></div>
+        <div style="text-align: center;  vertical-align: middle;" id="question"></div>
+        <button style="width: 10%; height: 4%; background-color: lightcoral;
+            text-align: center; font-size: 30px; border: solid 3px black; border-radius: 15px; display: block;
+            font-family: Atma, cursive, serif; margin-bottom: 1cm; margin-left: auto; margin-right: auto;"
+            onclick="checkQuestion()" id="buttonSubmit">Submit</button>
+    </div>
+</body>
+<script>
+    let questionsRight = 0
+    let questions = 0
+    let level = 1
+    let num1
+    let num2
+    let num3
+    let ans
+    newLevelCorrectStats()
+    generateQuestion()
+    
+    function generateQuestion() {
+        document.querySelector("#buttonSubmit").disabled = false
+        if (level == 1) {
+            num1 = Math.floor(Math.random() * 11)
+            num2 = Math.floor(Math.random() * (11 - num1))
+            ans = num1 + num2
+            document.querySelector("#question").innerHTML =
+            "<h2>What is the total?</h2><h3>" +
+            String(num1) + " + " +
+            String(num2) + " = " +
+            "<input type='number' class='answer' style='width: 50px; height: 50px; font-family: cursive, serif; font-size: 30px; background-color: #E3F2FD;'></h3>"
+            // <input type='number' class='answer' style='width: 50px; height: 50px; font-family: cursive, serif; font-size: 30px; background-color: #E3F2FD;'>
+        }
+        if (level == 2) {
+            num1 = Math.floor(Math.random() * 11)
+            num2 = Math.floor(Math.random() * num1)
+            ans = num1 - num2
+            document.querySelector("#question").innerHTML =
+            "<h2>What is the difference?</h2><h3>" +
+            String(num1) + " - " +
+            String(num2) + " = " +
+            "<input type='number' class='answer' style='width: 50px; height: 50px; font-family: cursive, serif; font-size: 30px; background-color: #E3F2FD;'></h3>"
+            // <input type='number' class='answer' style='width: 50px; height: 50px; font-family: cursive, serif; font-size: 30px; background-color: #E3F2FD;'>
+        }
+        if (level == 3) {
+            num1 = Math.floor(Math.random() * 11)
+            let operator1 = Boolean(Math.floor(Math.random() * 2))
+            num2 = Math.floor(Math.random() * (operator1 ? 11 - num1 : num1))
+            ans = operator1 ? num1 + num2 : num1 - num2
+            let operator2 = Boolean(Math.floor(Math.random() * 2))
+            num3 = Math.floor(Math.random() * (operator2 ? 11 - ans : ans))
+            ans = operator2 ? ans + num3 : ans - num3
+            document.querySelector("#question").innerHTML =
+            "<h2>What is the answer?!?</h2><h3>" +
+            String(num1) + (operator1 ? " + " : " - ") +
+            String(num2) + (operator2 ? " + " : " - ") +
+            String(num3) + " = " +
+            "<input type='number' class='answer' style='width: 50px; height: 50px; font-family: cursive, serif; font-size: 30px; background-color: #E3F2FD;' autocomplete='off'></h3>"
+            // <input type='number' class='answer' style='width: 50px; height: 50px; font-family: cursive, serif; font-size: 30px; background-color: #E3F2FD;' autocomplete='off'>
+        }
+    }
+
+    function checkQuestion() {
+        questions += 1
+        if (ans == document.querySelector(".answer").value) {
+            document.querySelector("#question").innerHTML = "<h2>Correct!</h2>"
+            questionsRight += 1
+            document.querySelector(".stat" + String(questions)).src = "../../../../Resources/img/quiz/correct.png"         
+        }
+        else {
+            document.querySelector("#question").innerHTML = "<h2>Incorrect!</h2>"
+            document.querySelector(".stat" + String(questions)).src = "../../../../Resources/img/quiz/incorrect.png" 
+        }
+        document.querySelector("#buttonSubmit").disabled = true
+        setTimeout(levelUp, 2000)
+    }
+
+    function newLevelCorrectStats() {
+        let req
+        let docAdd = ""
+        if (level == 1) {
+            req = 3
+        }
+        else if (level == 2) {
+            req = 5
+        }
+        else if (level == 3) {
+            req = 7
+        }
+        for (let i = 1; i <= req; i++) {
+            docAdd += "<img src='../../../../Resources/img/quiz/unsolved.png' class='stat" + String(i) + "' style='width: 50px'>"
+            document.querySelector("#level-marks").innerHTML = docAdd
+            document.querySelector("#level").innerHTML = "Level " + String(level)
+        }
+    }
+    function levelUp() {
+        if ((level == 1) && (questions == 3)) {
+            if (questionsRight >= 2) {
+                level += 1
+                document.querySelector("#question").innerHTML = "<h2>Level Completed!</h2>"
+            }
+            else {
+                document.querySelector("#question").innerHTML = "<h2>Level Failed!</h2>"
+            }
+            questionsRight = 0
+            questions = 0
+            newLevelCorrectStats()
+            setTimeout(generateQuestion, 2000)
+        }
+        else if ((level == 2) && (questions == 5)) {
+            if (questionsRight >= 3) {
+                level += 1
+                document.querySelector("#question").innerHTML = "<h2>Level Completed!</h2>"
+            }
+            else {
+                document.querySelector("#question").innerHTML = "<h2>Level Failed!</h2>"
+            }
+            questionsRight = 0
+            questions = 0
+            newLevelCorrectStats()
+            setTimeout(generateQuestion, 2000)
+        }
+        else if ((level == 3) && (questions == 7)) {
+            if (questionsRight >= 4) {
+                level += 1
+                document.querySelector("#question").innerHTML = "<h2>Quiz Completed! <a style='color: black' href='../../'>Back</a></h2>"
+                localStorage.setItem("quiz-addition-and-subtraction", true)
+            }
+            else {
+                document.querySelector("#question").innerHTML = "<h2>Level Failed!</h2>"
+            }
+            questionsRight = 0
+            questions = 0
+            newLevelCorrectStats()
+            setTimeout(generateQuestion, 2000)
+        }
+        else {generateQuestion()}
+    }
+</script>

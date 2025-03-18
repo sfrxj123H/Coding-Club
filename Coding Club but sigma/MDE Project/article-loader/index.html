@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>AP Education - Category Loader</title>
+</head>
+<body style="font-family: cursive, serif; font-size: 20px; background-color: #E3F2FD;">
+    <style> #category > h2:hover {color:blue;} #list > * {color: black;} #list > * :hover {color:blue;}</style>
+    <div style="background-color: #33424D; margin-top: -.7cm; height: 150px; color: white">
+        <a href="../" style="color: white;"><h1 style="font-family: Atma, cursive, serif; top: 8px; left: 5%; position: absolute;">AP Education</h1></a>
+        <h2 style="top: 15px; right: 5%; position: absolute; text-decoration: line-through;">Account</h2>
+     </div>
+     <div style="display: flex; justify-content: space-between; align-items: center; width: 90%; margin-left: auto; margin-right: auto;">
+        <div id="category" style="width: 20%; background-color: white; border-radius: 15px; margin-top: 40px;">
+            <h1 style="padding-left: 20px;">Category Loader</h1>
+            <h3 style="padding-left: 20px;">Enter category code:</h3>
+            <input type="text" style="width: 90%; height: 50px; font-family: cursive, serif; font-size: 30px;
+            background-color: #E3F2FD; margin-left: auto; margin-right: auto;display: block; margin-bottom: 3%;"
+            oninput="showArticles(document.querySelector('#article-input').value)" id="article-input" autocomplete="off">
+            <button style="width: 50%; background-color: lightcoral;
+            text-align: center; font-size: 30px; border: solid 3px black; border-radius: 15px; display: block;
+            font-family: Atma, cursive, serif; margin-bottom: 1cm; margin-left: auto; margin-right: auto;"
+            onclick="saveArticle()" id="btnSave" disabled>Save category</button>
+            <h3 style="padding-left: 20px;">Saved categories:</h3>
+            <div id="saved-list"></div>
+        </div>
+        <div id="list" style="text-align: center; width: 70%; background-color: white; border-radius: 15px; margin-top: 40px;">
+
+        </div>
+     </div>
+</body>
+<script type="module">
+    let saved
+    loadSaved()
+    import { loader } from "../article-loader/loader.js"
+    function showArticles(article, removal=false) {
+        document.querySelector('#article-input').value = article
+        loader(article, '#list')
+        if (document.querySelector('#list').innerHTML) {
+            document.querySelector('#btnSave').disabled = false
+        }
+        else { document.querySelector('#btnSave').disabled = true }
+        if (removal) {
+            document.querySelector('#list').innerHTML += `<h5 onclick="removeArticle('${document.querySelector('#article-input').value}')">Remove Article</h5>`
+        }
+    }
+
+    function saveArticle() {
+        if (saved.indexOf(document.querySelector('#article-input').value) == -1) {
+            saved.push(document.querySelector('#article-input').value)
+            localStorage.setItem('saved-article', JSON.stringify(saved))
+            loadSaved()
+        }
+    }
+
+    function loadSaved() {
+        saved = localStorage.getItem('saved-article')
+        if (saved == null) { saved = [] }
+        else { saved = JSON.parse(saved) }
+        let doc = ""
+        for (let i = 0; i < saved.length; i++) {
+            doc += `<h2 onclick="showArticles('${saved[i]}', true)" style="text-decoration: underline; padding-left: 20px;">${saved[i]}</h2>`
+        }
+        document.querySelector('#saved-list').innerHTML = doc
+    }
+
+    function removeArticle(key) {
+        console.log(saved)
+        saved = saved.filter(item => item != key)
+        localStorage.setItem('saved-article', JSON.stringify(saved))
+        loadSaved()
+    }
+
+    window.showArticles = showArticles
+    window.saveArticle = saveArticle
+    window.loadSaved = loadSaved
+    window.removeArticle = removeArticle
+</script>
