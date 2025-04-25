@@ -1,8 +1,14 @@
-def inout(tenfile, string=""):
-    if string: open(tenfile + ".OUT", "w+").write(string)
+def inout(tenfile, string="", allowletters=False):
+    if string:
+        open(tenfile + ".OUT", "w+").write(string)
+        exit()
+    # elif allowletters or not open(tenfile + ".INP", "r").read().isnumeric():
+    #     inout(tenfile, "Input includes alpha error!")
     else: return [int(i) for i in open(tenfile + ".INP", "r").read().split(" ")]
 
 n = inout("BPT")[0]
+if n < 1:
+    inout(tenfile, "Invalid input: < 1 !")
 print(n)
 out = 0
 
