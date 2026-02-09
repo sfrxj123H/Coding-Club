@@ -1,6 +1,7 @@
 class QuadFuncLibrary:
     def __init__(self):
         self.functionList = {}
+        self.complexResults = True
 
     def isSquaredRootRational(self, num):
         num2 = num
@@ -12,13 +13,17 @@ class QuadFuncLibrary:
         demr = int(dem ** 0.5)
         return num2r * num2r == num2 and demr * demr == dem
 
-    def d(self, value):
-        return round(value, 6)
+    def displayRounded(self, value):
+        if value == 0:
+            return 0
+        else:
+            return "{:.6f}".format(value).rstrip('0').rstrip('.') if '.' in "{:.6f}".format(value) else str(value)
 
     def tryInt(self, value):
+        value = float(value)
         return int(value) if value == int(value) else value
-        
-    def formatFunc(self, coef2, coef1, coef0, varName, factoredFormat=False, coef4=0, coef3=0):
+
+    def formatFunc(self, coef2, coef1, coef0, varName='x', factoredFormat=False, coef4=0, coef3=0):
         output = ""
         if coef4 != 0:
             if coef4 == 1:
@@ -26,7 +31,7 @@ class QuadFuncLibrary:
             elif coef4 == -1:
                 output += f"-{varName}⁴"
             else:
-                output += f"{self.tryInt(coef4)}{varName}⁴"
+                output += f"{self.displayRounded(coef4)}{varName}⁴"
         if coef3 != 0:
             if coef4 != 0:
                 if coef3 > 0:
@@ -39,7 +44,7 @@ class QuadFuncLibrary:
             if abs(self.tryInt(coef3)) == 1:
                 output += f"{varName}³"
             else:
-                output += f"{abs(self.tryInt(coef3))}{varName}³"
+                output += f"{self.displayRounded(abs(self.tryInt(coef3)))}{varName}³"
         if coef2 != 0:
             if coef4 != 0 or coef3 != 0:
                 if coef2 > 0:
@@ -52,7 +57,7 @@ class QuadFuncLibrary:
             if abs(self.tryInt(coef2)) == 1:
                 output += f"{varName}²"
             else:
-                output += f"{abs(self.tryInt(coef2))}{varName}²"
+                output += f"{self.displayRounded(abs(self.tryInt(coef2)))}{varName}²"
         if coef1 != 0:
             if coef4 != 0 or coef3 != 0 or coef2 != 0:
                 if coef1 > 0:
@@ -65,16 +70,16 @@ class QuadFuncLibrary:
             if abs(self.tryInt(coef1)) == 1:
                 output += f"{varName}"
             else:
-                output += f"{abs(self.tryInt(coef1))}{varName}"
+                output += f"{self.displayRounded(abs(self.tryInt(coef1)))}{varName}"
         if coef2 == 0 and coef1 == 0:
-            output += f"{self.tryInt(coef0)}"
+            output += f"{self.displayRounded(coef0)}"
         elif coef0 != 0:
             if coef4!= 0 or coef3!= 0 or coef2 != 0 or coef1 != 0:
                 output += " "
             if coef0 > 0:
-                output += f"+ {self.tryInt(coef0)}"
+                output += f"+ {self.displayRounded(coef0)}"
             else:
-                output += f"- {abs(self.tryInt(coef0))}"
+                output += f"- {self.displayRounded(abs(self.tryInt(coef0)))}"
         if int(coef4 == 0) + int(coef3 == 0) + int(coef2 == 0) + int(coef1 == 0) + int(coef0 == 0) < 4 and factoredFormat:
             output = "(" + output + ")"
         return output
@@ -82,15 +87,15 @@ class QuadFuncLibrary:
     def functionEvaluation(self, a, b, c):
         print("Specify the range for evaluating the function:")
 
-        minStep = self.tryInt(float(input("Minimum x value: ")))
-        maxStep = self.tryInt(float(input("Maximum x value: ")))
-        step = self.tryInt(float(input("Step value: ")))
+        minStep = self.tryInt(input("Minimum x value: "))
+        maxStep = self.tryInt(input("Maximum x value: "))
+        step = self.tryInt(input("Step value: "))
 
         if minStep <= maxStep:
             print(f"\nFUNCTION VALUES WHEN x EQUALS FROM {minStep} TO {maxStep} (STEP {step})")
             for i in range(0, int((maxStep - minStep) / step) + 1):
                 x = self.tryInt(minStep + i * step)
-                print(f"f({x}) = {self.tryInt(a*x**2 + b*x + c)}")
+                print(f"f({self.displayRounded(x)}) = {self.displayRounded(a*x**2 + b*x + c)}")
 
     def rootFinder(self, a, b, c, isIntersect=False, intersect_a=0, intersect_b=0, intersect_c=0):
         if a != 0:
@@ -103,34 +108,49 @@ class QuadFuncLibrary:
                     roots = roots[::-1]
                 root1 = min(roots)
                 root2 = max(roots)
-                if self.isSquaredRootRational(discriminant):
-                    print(f"Roots: x₁ = {self.d(root1)}, x₂ = {self.d(root2)}")
+                if self.isSquaredRootRational(discriminant) or not self.complexResults:
+                    print(f"Roots: x₁ = {self.displayRounded(root1)}, x₂ = {self.displayRounded(root2)}")
                     print(f"Factored form: {self.formatFunc(0, a, -a*roots[0], 'x', 1)}{self.formatFunc(0, 1, -roots[1], 'x', 1)}")
                 else:
-                    ddiscriminant = discriminant
-                    ddenominator = self.tryInt(abs(2*a))
-                    for i in range(self.tryInt(abs(2*a)), 1, -1):
+                    #Starts searching for more complex results
+                    ddenominator = float(self.displayRounded(abs(2*a)))
+                    print(ddenominator)
+                    multiplier = 1
+                    while ddenominator % 1 != 0:
+                        ddenominator = float(self.displayRounded(ddenominator*10))
+                        multiplier = float(self.displayRounded(multiplier*10))
+                    while ddenominator % 2 == 0 and multiplier % 2 == 0:
+                        ddenominator /= 2
+                        multiplier /= 2
+                    while ddenominator % 5 == 0 and multiplier % 5 == 0:
+                        ddenominator /= 5
+                        multiplier /= 5
+                    ddenominator = int(ddenominator)
+                    multiplier = int(multiplier)
+                    ddiscriminant = self.tryInt(self.displayRounded(discriminant))
+                    for i in range(ddenominator, 1, -1):
                         if ddiscriminant % (i*i) == 0 and ddenominator % i == 0:
                             ddiscriminant = self.tryInt(ddiscriminant // (i*i))
                             ddenominator = self.tryInt(ddenominator // i)
-                    droot1 = f"{self.d(self.tryInt(-b / (2*a)))} - √{ddiscriminant}{' /' + str(ddenominator) if ddenominator != 1 else ''}"
-                    droot2 = f"{self.d(self.tryInt(-b / (2*a)))} + √{ddiscriminant}{' /' + str(ddenominator) if ddenominator != 1 else ''}"
-                    fd1 = f"- √{ddiscriminant}{' /' + str(ddenominator) if ddenominator != 1 else ''}"
-                    fd2 = f"+ √{ddiscriminant}{' /' + str(ddenominator) if ddenominator != 1 else ''}"
+                    #Display results
+                    droot1 = f"{self.displayRounded(-b / (2*a))} - {multiplier if multiplier != 1 else ''}√{ddiscriminant if ddiscriminant % 1 == 0 else f'({ddiscriminant})'}{' / ' + str(ddenominator) if ddenominator != 1 else ''}"
+                    droot2 = f"{self.displayRounded(-b / (2*a))} + {multiplier if multiplier != 1 else ''}√{ddiscriminant if ddiscriminant % 1 == 0 else f'({ddiscriminant})'}{' / ' + str(ddenominator) if ddenominator != 1 else ''}"
+                    fd1 = f"- {multiplier if multiplier != 1 else ''}√{ddiscriminant if ddiscriminant % 1 == 0 else f'({ddiscriminant})'}{' /' + str(ddenominator) if ddenominator != 1 else ''}"
+                    fd2 = f"+ {multiplier if multiplier != 1 else ''}√{ddiscriminant if ddiscriminant % 1 == 0 else f'({ddiscriminant})'}{' /' + str(ddenominator) if ddenominator != 1 else ''}"
                     print(f"Roots: x₁ = {droot1}, x₂ = {droot2}")
                     print(f"Factored form: {self.formatFunc(0, a, 0, '', 1)}({self.formatFunc(0, 1, -self.tryInt(-b / (2*a)), 'x')} {fd1})({self.formatFunc(0, 1, -self.tryInt(-b / (2*a)), 'x')} {fd2})")
             elif discriminant == 0:
                 root = self.tryInt(-b / (2*a))
                 roots = [root]
                 print(f"Root: x = {root}")
-                print(f"Factored form: {self.formatFunc(0, a, 0, '', 1)}{self.formatFunc(0, 1, -root, 'x', 1)}²")
+                print(f"Factored form: {self.formatFunc(0, a, 0, '', 1)}{self.formatFunc(0, 1, -self.displayRounded(root), 'x', 1)}²")
             else:
                 roots = []
                 print("Roots: No real roots.")
         elif b != 0:
             root = self.tryInt(-c / b)
             roots = [root]
-            print(f"Root: x = {root}")
+            print(f"Root: x = {self.displayRounded(root)}")
         else:
             if c == 0:
                 roots = 0
@@ -148,16 +168,14 @@ class QuadFuncLibrary:
                         intersect_roots.append((x, self.tryInt(intersect_a*x**2 + intersect_b*x + intersect_c)))
                     dprint = ""
                     for x, y in intersect_roots:
-                        dprint += f"({self.d(x)}, {self.d(y)}), "
+                        dprint += f"({self.displayRounded(x)}, {self.displayRounded(y)}), "
                     print(f"Intersection{'s' if len(intersect_roots) > 1 else ''}: {dprint[:-2]}")
 
-    def functionInfo(self, a, b, c):
+    def vertexFinder(self, a, b, c):
         discriminant = b**2 - 4*a*c
-        print(f"\nFUNCTION INFO")
-        self.rootFinder(a, b, c)
         if a != 0:
-            vertex_x = self.tryInt(-b / (2*a))
-            vertex_y = self.tryInt(-discriminant / (4*a))
+            vertex_x = self.displayRounded(-b / (2*a))
+            vertex_y = self.displayRounded(-discriminant / (4*a))
             print(f"Vertex: ({vertex_x}, {vertex_y})")
             print(f"Axis of symmetry: x = {vertex_x}")
             if a > 0:
@@ -174,6 +192,11 @@ class QuadFuncLibrary:
                 print("Direction: Decreases")
         else:
             print("Type: Constant function")
+
+    def functionInfo(self, a, b, c):
+        print(f"\nFUNCTION INFO")
+        self.rootFinder(a, b, c)
+        self.vertexFinder(a, b, c)
 
     def polinomialInput(self):
         a, b, c = 0, 0, 0
@@ -249,7 +272,7 @@ class QuadFuncLibrary:
                         if c == k:
                             print("Error: c cannot be equal to the y value of the vertex.")
                             return 0, 0, 0
-                        a = (k - c) / (h**2)
+                        a = (c - k) / (h**2)
                         b = -2 * a * h
             elif inputMethod == "4":
                 print("Enter three points (x1, y1), (x2, y2) and (x3, y3) to calculate the coefficients of the quadratic function.")
@@ -338,7 +361,7 @@ class QuadFuncLibrary:
             Input method: """)
             if inputMethod == "1":
                 print("Enter the coefficient for the constant function f(x) = c")
-                a, b, c = 0, 0, self.tryInt(float(input("c = ")))
+                a, b, c = 0, 0, self.tryInt(input("c = "))
             elif inputMethod == "0":
                 return self.polinomialInput()
         else:
@@ -346,24 +369,37 @@ class QuadFuncLibrary:
         return a, b, c
 
     def mathOperations(self, a1, b1, c1, a2, b2, c2, fname1, fname2):
-        inputMethod = input(f"""
-            Choose your operation:
-            1. Addition/Subtraction ( a × {fname1}(x) + b × {fname2}(x) )
-            2. Multiplication ( n × {fname1}(x) × {fname2}(x) )
-            3. Division ( n × {fname1}(x) / {fname2}(x) ) ({fname2}(x) ≠ 0) (not done)
-            4. Division ( n × {fname2}(x) / {fname1}(x) ) ({fname1}(x) ≠ 0) (not done)
-            0. Go back
-            Input method: """)
+        duplicateCondition = a1 == a2 and b1 == b2 and c1 == c2 and fname1 == fname2
+        if duplicateCondition:
+            inputMethod = input(f"""
+                Choose your operation:
+                1. a × {fname1}(x) + c
+                2. n × [{fname1}(x)]²
+                0. Go back
+                Operation: """)
+        else:
+            inputMethod = input(f"""
+                Choose your operation:
+                1. Addition/Subtraction ( a × {fname1}(x) + b × {fname2}(x) + c)
+                2. Multiplication ( n × {fname1}(x) × {fname2}(x) )
+                3. Division ( n × {fname1}(x) / {fname2}(x) ) ({fname2}(x) ≠ 0) (not done)
+                4. Division ( n × {fname2}(x) / {fname1}(x) ) ({fname1}(x) ≠ 0) (not done)
+                0. Go back
+                Operation: """)
         if inputMethod == "1":
-            a = self.tryInt(float(input(f"Enter coefficient a for {fname1}(x): ")))
-            b = self.tryInt(float(input(f"Enter coefficient b for {fname2}(x): ")))
+            a = self.tryInt(input(f"Enter coefficient a for {fname1}(x): "))
+            if duplicateCondition:
+                b = 0
+            else:
+                b = self.tryInt(input(f"Enter coefficient b for {fname2}(x): "))
+            c = self.tryInt(input(f"Enter free coefficient c: "))
             new_a = a * a1 + b * a2
             new_b = a * b1 + b * b2
-            new_c = a * c1 + b * c2
+            new_c = a * c1 + b * c2 + c
             print(f"Resulting function: {self.formatFunc(new_a, new_b, new_c, 'x')}")
             self.rootFinder(new_a, new_b, new_c, True, a2, b2, c2)
         if inputMethod == "2":
-            n = self.tryInt(float(input("Enter coefficient n: ")))
+            n = self.tryInt(input("Enter coefficient n: "))
             new_a = n * (a1 * a2)
             new_b = n * (a1 * b2 + b1 * a2)
             new_c = n * (a1 * c2 + b1 * b2 + c1 * a2)
@@ -373,13 +409,14 @@ class QuadFuncLibrary:
             if a1 != 0:
                 discriminant1 = b1**2 - 4*a1*c1
                 if discriminant1 >= 0:
-                    roots1 = []
                     if discriminant1 > 0:
-                        roots1 = [self.d(self.tryInt((-b1 - discriminant1**0.5) / (2*a1))), self.d(self.tryInt((-b1 + discriminant1**0.5) / (2*a1)))]
-                    elif discriminant1 == 0:
-                        roots1 = [self.d(self.tryInt(-b1 / (2*a1)))]
+                        roots1 = [self.tryInt((-b1 - discriminant1**0.5) / (2*a1)), self.tryInt((-b1 + discriminant1**0.5) / (2*a1))]
+                    else:
+                        roots1 = [self.tryInt(-b1 / (2*a1))]
+                else:
+                    roots1 = []
             elif b1 != 0:
-                roots1 = [self.d(self.tryInt(-c1 / b1))]
+                roots1 = [self.tryInt(-c1 / b1)]
             elif c1 == 0:
                 roots1 = 0
             else:
@@ -387,34 +424,63 @@ class QuadFuncLibrary:
             if a2 != 0:
                 discriminant2 = b2**2 - 4*a2*c2
                 if discriminant2 >= 0:
-                    roots2 = []
                     if discriminant2 > 0:
-                        roots2 = [self.d(self.tryInt((-b2 - discriminant2**0.5) / (2*a2))), self.d(self.tryInt((-b2 + discriminant2**0.5) / (2*a2)))]
-                    elif discriminant2 == 0:
-                        roots2 = [self.d(self.tryInt(-b2 / (2*a2)))]
+                        roots2 = [self.tryInt((-b2 - discriminant2**0.5) / (2*a2)), self.tryInt((-b2 + discriminant2**0.5) / (2*a2))]
+                    else:
+                        roots2 = [self.tryInt(-b2 / (2*a2))]
+                else:
+                    roots2 = []
             elif b2 != 0:
-                roots2 = [self.d(self.tryInt(-c2 / b2))]
+                roots2 = [self.tryInt(-c2 / b2)]
             elif c2 == 0:
                 roots2 = 0
             else:
                 roots2 = []
-            print(roots1, roots2)
+            if n == 0:
+                roots1, roots2 = 0, 0
             if roots1 == 0 or roots2 == 0:
                 print("Infinite solutions.")
             elif len(roots1) != 0 or len(roots2) != 0:
-                solutions = sorted(list(set(roots1 + roots2)))
+                solutions = list(set([self.tryInt(self.displayRounded(i)) for i in sorted(roots1 + roots2)]))
                 print(f"Solutions:{str(solutions).replace('[', ' ').replace(']', '')}")
             else:
                 print("No real solutions.")
+        if inputMethod == "3":
+            n = self.tryInt(input("Enter coefficient n: "))
+            if a2 != 0:
+                #c
+                a = 0
+                b = 0
+                c = a1/a2
+                rb = b1 - (a1*b2) / a2
+                rc = c1 - (a1*c2) / a2
+            elif b2 != 0:
+                #bx + c
+                a = 0
+                b = a1/b2
+                c = (b1*b2-a1*c2)/(b2*b2)
+                rb = 0
+                rc = c1 - c2*c
+            elif c2 != 0:
+                #ax2 + bx + c
+                a = a1/c2
+                b = b1/c2
+                c = c1/c2
+                rb = 0
+                rc = 0
+            else:
+                pass
+            a, b, c, rb, rc = a*n, b*n, c*n, rb*n, rc*n
 
     def main(self):
         if len(self.functionList.items()) == 0:
             print("\nLets start with a new function!")
-            name = input("Enter the name of the function (ex: 'f'): ")
-            print(f"Defining {name}(x):")
+            fname = input("Enter the name of the function (ex: 'f'): ")
+            print(f"Defining {fname}(x):")
             a, b, c = self.polinomialInput()
-            self.functionList[name] = (a, b, c)
-            print(f"Created function {name}(x) = {self.formatFunc(a, b, c, 'x')}")
+            self.functionList[fname] = (a, b, c)
+            print(f"Created function {fname}(x) = {self.formatFunc(a, b, c, 'x')}")
+            input("Press Enter to continue...")
             self.main()
         else:
             print(f"\nAvailable functions:")
@@ -426,7 +492,7 @@ class QuadFuncLibrary:
             2. Get information about function
             3. Redefine existing functions
             4. Define new function
-            5. Preform math operations on functions
+            5. Preform math operations on 2 functions
             6. Delete a function
             0. Exit
             Input method: """)
@@ -455,7 +521,10 @@ class QuadFuncLibrary:
                 input("Press Enter to continue...")
                 self.main()
             elif inputMethod == "3":
-                fname = input("Enter the name of the function to redefine: ")
+                if len(self.functionList) > 1:
+                    fname = input("Enter the name of the function: ")
+                else:
+                    fname = list(self.functionList.keys())[0]
                 if fname in self.functionList:
                     print(f"Redefining {fname}(x):")
                     a, b, c = self.polinomialInput()
@@ -467,30 +536,30 @@ class QuadFuncLibrary:
                 self.main()
             elif inputMethod == "4":
                 print("\nDefining a new function!")
-                name = input("Enter the name of the function: ")
-                if name not in self.functionList:
-                    print(f"Defining {name}(x):")
+                fname = input("Enter the name of the function: ")
+                if fname not in self.functionList:
+                    print(f"Defining {fname}(x):")
                     a, b, c = self.polinomialInput()
-                    self.functionList[name] = (a, b, c)
-                    print(f"Created function {name}(x) = {self.formatFunc(a, b, c, 'x')}")
+                    self.functionList[fname] = (a, b, c)
+                    print(f"Created function {fname}(x) = {self.formatFunc(a, b, c, 'x')}")
                 else:
                     print("Error: Function name already exists.")
                 input("Press Enter to continue...")
                 self.main()
             elif inputMethod == "5":
                 print("Function operations are testing.")
-                if len(self.functionList) < 2:
-                    print("Error: At least two functions are required to perform operations.")
-                    input("Press Enter to continue...")
-                else:
+                if len(self.functionList) >= 2:
                     fname1 = input("Enter the name of the first function: ")
                     fname2 = input("Enter the name of the second function: ")
-                    if fname1 in self.functionList and fname2 in self.functionList:
-                        a1, b1, c1 = self.functionList[fname1]
-                        a2, b2, c2 = self.functionList[fname2]
-                        self.mathOperations(a1, b1, c1, a2, b2, c2, fname1, fname2)
-                    else:
-                        print("Error: One or both functions not found.")
+                else:
+                    print(f"{list(self.functionList.keys())[0]}(x) will be used for both functions")
+                    fname1, fname2 = list(self.functionList.keys()) * 2
+                if fname1 in self.functionList and fname2 in self.functionList:
+                    a1, b1, c1 = self.functionList[fname1]
+                    a2, b2, c2 = self.functionList[fname2]
+                    self.mathOperations(a1, b1, c1, a2, b2, c2, fname1, fname2)
+                else:
+                    print("Error: One or both functions not found.")
                 input("Press Enter to continue...")
                 self.main()
             elif inputMethod == "6":
